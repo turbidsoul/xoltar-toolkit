@@ -1,0 +1,34 @@
+Release Name: 0.7.0 10/18/2000
+
+lazy.py provides support for lazy expressions, lazy tuples
+(functional programming languages call these lazy lists, but since lists are
+mutable in Python, tuples are closer in meaning), and lazy equivalents
+for map, filter, reduce, and zip.
+
+
+Changes:
+
+06/01/01 - Version 0.8:
+
+    Thanks to Steven Cleary for bug reports and suggestions.
+    
+    Changed class hierarchy as follows:
+        
+                 LazyExpr
+                /
+        Lazy---|                 LazyTuple
+                \               /
+                 LazySequence --
+                                \
+                                 LazySlice
+
+    Several bugs were fixed, and the difference between (possibly)
+    infinite sequences and sequences which are known to terminate, but
+    at an unknown length is now explicit. As a result of changing the
+    class hierarchy, LazyTuple now takes far fewer constructor arguments.
+
+    Change to PyUnit for testing.    
+        
+10/18/2000 - Version 0.7:
+    Lazy has become its own module now, since functional was growing
+    somewhat large.

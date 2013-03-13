@@ -1,0 +1,118 @@
+Release Name: 1.0 02/23/2000
+functional.py provides support for a functional style of Python programming.
+
+It includes support for closures, curried functions, many higher-order
+functions for composing, joining or otherwise manipulating functions
+and other callables.
+
+Changes:
+    06/01/2001 - Version 1.1
+
+    Thanks to Ben Wolfson for a patch to compose(), which became applycompose()
+    Belated thanks to Dr. David Mertz for his suggestion for the Bindings class.
+
+    Note: Due to the changes in nested scoping, functional.py requires either a
+    version of Python earlier than 2.1, or nested scopes should be enabled.
+    Under the latter scenario, closure() is the identity function, since every
+    nested function is a closure.
+
+    New Features:
+        
+    Added operators for Functor, and wrap(), which wraps a function in a
+    Functor, to enable those same operators... The operators are:
+
+    f * g == compose(f, g)
+    f & g == conjoin(f, g)
+    f | g == disjoin(f, g)
+    f + g == also(f, g)
+    f << a == curry(f, a)
+
+    Added do(), which can be used to express sequential actions in lambdas,
+    dispatch(), which is a functional shorthand for object-oriented method
+    lookup. Also, added applycompose, a version of compose which unpacks tuples
+    before calling the next function in line (patch from Ben Wolfson)
+
+        
+    02/26/2000 - Version 1.0
+
+    Added Bindings, a class with write-once attributes, useful for ensuring
+    variable bindings don't change unexpectedly. Also added namespace()
+    function, which extracts the attributes off a Bindings object into
+    a dictionary, suitable for eval()'ing with.
+    
+    Changed name of with_error to error_handler to help make clear the fact
+    that it's generating a new function which handles its own errors, not
+    trying to call a function now and dealing with any errors it may raise.
+    
+    Added trap_error for those sorts of situations. Both allow the second
+    argument to be non-callable. If that argument is not callable, then in
+    the case of an error, the error is silently discarded, and the supplied
+    argument (or None) is returned instead.
+
+    Added 'error' function which is a functional equivalent to the 'raise'
+    statement and can therefore be used within expressions, including lambdas.
+
+    Added mapdict, filterdict, invertdict, and dict functions for creating
+    and manipulating dictionaries in a way similar to using map and filter
+    on lists. I'll get around to reducedict if anyone else can figure out
+    something they'd like to use it for. :-)
+    
+    Fixed Functor to report __name__ and __doc__ of the function properly
+    instead of raising an AttributeError.
+
+    Changed 'always' functors to accept any arguments when called, rather
+    than only 0 args.
+
+    Rcurry has been changed to raise an error if applied to a callable which
+    uses keyword arguments, or takes a variable number of arguments. Use
+    curry for those cases, since it allows more explicit control of partial
+    application. This change was made because it was difficult to establish
+    non-surprising behavior for rcurry in these situations.
+    
+    First removed closure function, since Python 2.1 supports them directly, then
+    put it back, when the winds shifted against nested scopes.
+    
+    Converted test suite to use PyUnit. Wrote more tests.
+
+    11/4/2000 - Version 0.8
+    Added new functions: any, all, none_of, head, tail, car, cdr. Any, all,
+    and none_of check a sequence and return 1 if any, all, or none of the
+    elements are nonzero or pass a user-supplied test function. Head and tail
+    return the first and remaining elements of a sequence, respectively, and
+    car and cdr are just aliases for head and tail for the Lisp folks.
+
+    10/25/2000 - Version 0.71
+    getMinArgCount has been removed in favor of a smarter FuncMethUnion.
+    This means that curry and rcurry are more likely to be able to make
+    intelligent decisions about the funtions they're working on.
+
+    10/18/2000 - Version 0.7:
+    All the functors (callable classes) now descend from Functor, a class which
+    provides facilities for masquerading as a function. This allows things like
+    curries and disjoins to be passed to code which expects to be able to
+    inspect it for things like the names of its arguments, default values, etc.
+    These functors all provide a SimCode instance as their func_code attribute,
+    which has most of the information that a real code object would have, which
+    helps complete the illusion.
+
+    This release fixes bugs which affected the curry and rcurry functors. As a
+    result, curry and rcurry will now work with any callable, not only functions
+    and methods. This includes *classes* as well, so you can now pass a class
+    as the first argument to curry, and when the curried function is called,
+    the return value will be a new instance of the class.
+
+    The Lazy and LazyTuple classes, along with related items, have been removed
+    to their own module, lazy.py.
+
+
+    10/12/2000 - Version 0.6:
+    Fix for LazyTuples of length zero (thanks to Alex Martelli)
+    Added new functions/functors:
+       sequential
+       also
+       any_args
+       always
+       with_error
+       attempt
+
+    10/1/2000 - Initial release 0.5

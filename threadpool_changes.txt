@@ -1,0 +1,54 @@
+
+Release Name: 1.0.1
+
+Notes:
+This module uses the threading and Queue modules to create a pool of reusable
+threads.
+
+After creating an instance of ThreadPool, one queues functions to be
+excecuted. The pool dispatches the functions to the waiting threads, which
+call them.
+
+When queueing a function on the pool with *pool*.put(), an instance
+of ReturnValue is returned. ReturnValue is a subclass of functional.Lazy, and
+can be used in any context that a regular lazy expression can. When evaluating
+a ReturnValue, the evaluating thread will block until the other thread has
+completed its work and loaded the return value of the function into the
+ReturnValue instance.
+
+VLocks are an alternative to RLocks which include a visible queue threads waiting
+for the lock.
+
+lock, unlock, getLockFor, and deleteLockFor work with a module-level
+dictionary of objects to locks, and can be more convenient than working with
+lock objects directly.
+
+Locked and Async are callable wrappers around a function. Async calls return
+immediately after queueing their function on a thread pool, while Locked calls
+first acquire the lock they were passed on creation, call their function, and
+release the lock.
+
+06/01/01:
+    This is a maintenance release:
+    Updated to reflect changes in lazy.py.
+    
+Changes:
+11/4/2000:
+    Thread pools can be set to use daemon threads or not by passing a one or
+    zero for the named parameter 'daemon' when constructing one. By default,
+    thread pools now use daemon threads.
+
+    By passing an optional 'associated' argument to ThreadPool.put, the thread
+    which actually runs that job will have that data associated with it while
+    it's doing that job. Calling *thread*.getAssociatedData() will return it.
+    This could be useful for associating some sort of security information with
+    the task, for instance.
+    
+10/25/2000:
+    Fixed import from wrong module.
+10/18/2000:
+    Release 0.9
+    Fixed endless loop bug when an exception was raised.
+
+10/12/2000:
+    Move to SourceForge, release 0.8
